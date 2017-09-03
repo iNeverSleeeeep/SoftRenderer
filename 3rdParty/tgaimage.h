@@ -1,5 +1,4 @@
-#ifndef __IMAGE_H__
-#define __IMAGE_H__
+#pragma once
 
 #include <fstream>
 
@@ -93,6 +92,4 @@ public:
     unsigned char *buffer();
     void clear();
 };
-
-#endif //__IMAGE_H__
 

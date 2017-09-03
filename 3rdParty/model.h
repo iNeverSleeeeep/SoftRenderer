@@ -1,5 +1,4 @@
-#ifndef __MODEL_H__
-#define __MODEL_H__
+#pragma once
 #include <vector>
 #include <string>
 #include "../types/types.h"
@@ -29,5 +28,4 @@ public:
     float specular(float2 uv);
     std::vector<int> face(int idx);
 };
-#endif //__MODEL_H__
 
