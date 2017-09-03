@@ -96,28 +96,17 @@ void Interpolation(float2 p1, float2 p2, float2 p3, function<void(float2)> handl
 	if (p1.y > p2.y) swap(p1, p2);
 	if (p2.y > p3.y) swap(p2, p3);
 
+	float slope13 = (p3.y - p1.y) / (p3.x - p1.x);
+	float slope13p = 1 / slope13;
 	if (p1.y < p2.y)
 	{
-		float slope13 = (p3.y - p1.y) / (p3.x - p1.x);
-		float slope13p = 1 / slope13;
-
-		float minStartX = min(int(p1.x), int(p1.x) + 1);
-		float maxStartX = max(int(p1.x), int(p1.x) + 1);
-		float minEndX = min(int(p3.x), int(p3.x) + 1);
-		float maxEndX = max(int(p3.x), int(p3.x) + 1);
-		
-		float minX = min(minStartX, minEndX);
-		float maxX = max(maxStartX, maxEndX);
-		
-		int index = 0;
 		Interpolation(p1, p2, [&](float2 p) {
 			float x = round((p.y - p1.y)*slope13p + p1.x);
 			Interpolation(p, { x, p.y }, handler);
 		});
-
-		Interpolation(p2, p3, [&](float2 p) {
-			float x = round((p.y - p1.y)*slope13p + p1.x);
-			Interpolation(p, { x, p.y }, handler);
-		});
 	}
+	Interpolation(p2, p3, [&](float2 p) {
+		float x = round((p.y - p1.y)*slope13p + p1.x);
+		Interpolation(p, { x, p.y }, handler);
+	});
 }
