@@ -79,7 +79,6 @@ public:
 	void start() override
 	{
 		// 镂空三角形
-		if (true)
 		{
 			float2 t0[3] = { float2(10, 70),   float2(50, 160),  float2(70, 80) };
 			float2 t1[3] = { float2(180, 50),  float2(150, 1),   float2(70, 180) };
@@ -130,7 +129,7 @@ public:
 				float2 screen_coords[3];
 				for (int j = 0; j<3; j++) {
 					float3 v = model.vert(face[j]);
-					screen_coords[j] = float2((v.x + 1)*width / 2.0, (v.y + 1)*height / 2.0);
+					screen_coords[j] = float2(int((v.x + 1)*width / 2.0), int((v.y + 1)*height / 2.0));
 				}
 				TGAColor randomColor(rand() % 255, rand() % 255, rand() % 255, 255);
 				Interpolation(screen_coords[0], screen_coords[1], screen_coords[2], [&](float2 p) {
@@ -154,7 +153,7 @@ public:
 				float3 world_coords[3];
 				for (int j = 0; j<3; j++) {
 					float3 v = model.vert(face[j]);
-					screen_coords[j] = float2((v.x + 1)*width / 2.0, (v.y + 1)*height / 2.0);
+					screen_coords[j] = float2(int((v.x + 1)*width / 2.0), int((v.y + 1)*height / 2.0));
 					world_coords[j] = v;
 				}
 				float3 a = world_coords[2] - world_coords[0];
@@ -175,11 +174,75 @@ public:
 	}
 };
 
+class Lesson3 : public Lesson
+{
+	const TGAColor red = TGAColor(255, 0, 0, 255);
+	const TGAColor blue = TGAColor(0, 0, 255, 255);
+	const TGAColor green = TGAColor(0, 255, 0, 255);
+
+public:
+	void start() override
+	{
+		// z-buffer
+		{
+			const float width = 500;
+			const float height = 500;
+			float3 lightDir(0, 0, -1);
+			Model model("resource/african_head/african_head.obj");
+			TGAImage image(width, height, TGAImage::RGB);
+			float zBuffer[500][500];
+			for(int i = 0; i < 500; ++i)
+				for(int j = 0; j < 500; ++j)
+					zBuffer[i][j] = -std::numeric_limits<float>::max();
+
+			for (int i = 0; i<model.nfaces(); i++) {
+				std::vector<int> face = model.face(i);
+				float3 screen_coords[3];
+				float3 world_coords[3];
+				for (int j = 0; j<3; j++) {
+					float3 v = model.vert(face[j]);
+					screen_coords[j] = float3(int((v.x + 1)*width / 2.0 + 0.5), int((v.y + 1)*height / 2.0 + 0.5), v.z);
+					world_coords[j] = v;
+				}
+				float3 a = world_coords[2] - world_coords[0];
+				float3 b = world_coords[1] - world_coords[0];
+				float3 n = a.cross(b);
+				float diffuse = n.normalize().dot(lightDir);
+				if (diffuse > 0)
+				{
+					TGAColor lightColor(diffuse * 255, diffuse * 255, diffuse * 255, 255);
+					Interpolation(screen_coords[0], screen_coords[1], screen_coords[2], [&](float3 p) {
+						if (p.z > zBuffer[int(p.x)][int(p.y)])
+						{
+							image.set(p.x, p.y, lightColor);
+							zBuffer[int(p.x)][int(p.y)] = p.z;
+						}
+					});
+				}
+			}
+			image.flip_vertically();
+			image.write_tga_file("output/lesson3/zBufferModel.tga");
+
+			image.clear();
+			for (int i = 0; i < 500; ++i)
+			{
+				for (int j = 0; j < 500; ++j)
+				{
+					int gray = (zBuffer[i][j] + 1) / 2 * 255;
+					image.set(i, j, TGAColor(gray, gray, gray, 255));
+				}
+			}
+			image.flip_vertically();
+			image.write_tga_file("output/lesson3/zBuffer.tga");
+		}
+	}
+};
+
 int main(int argc, char** argv)
 {
-	vector<Lesson*> lessons = { new Lesson1(), new Lesson2() };
+	vector<Lesson*> lessons = { new Lesson1(), new Lesson2(), new Lesson3() };
 
-	lessons[1]->start();
+	lessons[2]->start();
 
 	for (auto lesson : lessons)
 	{
