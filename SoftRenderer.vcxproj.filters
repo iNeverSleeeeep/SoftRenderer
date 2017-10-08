@@ -28,6 +28,9 @@
     <Filter Include="源文件\3rdParty">
       <UniqueIdentifier>{9783a561-a150-4c7b-8485-6ada790a5d24}</UniqueIdentifier>
     </Filter>
+    <Filter Include="源文件\helper">
+      <UniqueIdentifier>{755c6a64-dab1-44a7-82a1-3fdd0ae6fe49}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -44,6 +47,9 @@
     </ClCompile>
     <ClCompile Include="3rdParty\tgaimage.cpp">
       <Filter>源文件\3rdParty</Filter>
+    </ClCompile>
+    <ClCompile Include="helper\interpolationHelper.cpp">
+      <Filter>源文件\helper</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -69,6 +75,9 @@
       <Filter>头文件\types</Filter>
     </ClInclude>
     <ClInclude Include="renderer\renderer.h">
+      <Filter>头文件\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="renderer\pipeline.h">
       <Filter>头文件\renderer</Filter>
     </ClInclude>
   </ItemGroup>

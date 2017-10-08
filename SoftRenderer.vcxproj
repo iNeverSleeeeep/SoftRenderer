@@ -148,6 +148,7 @@
   <ItemGroup>
     <ClCompile Include="3rdParty\model.cpp" />
     <ClCompile Include="3rdParty\tgaimage.cpp" />
+    <ClCompile Include="helper\interpolationHelper.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="renderer\renderer.cpp" />
   </ItemGroup>
@@ -155,6 +156,7 @@
     <ClInclude Include="3rdParty\model.h" />
     <ClInclude Include="3rdParty\tgaimage.h" />
     <ClInclude Include="helper\interpolationHelper.h" />
+    <ClInclude Include="renderer\pipeline.h" />
     <ClInclude Include="renderer\renderer.h" />
     <ClInclude Include="types\float2.h" />
     <ClInclude Include="types\float3.h" />

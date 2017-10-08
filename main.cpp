@@ -28,6 +28,14 @@ public:
 			image.flip_vertically();
 			image.write_tga_file("output/lesson1/point.tga");
 		}
+		{
+			TGAImage image(100, 100, TGAImage::RGB);
+			Interpolation0({ 13, 20 }, { 80, 40 }, [&](float2 p) { image.set(p.x, p.y, white); });
+			Interpolation0({ 20, 13 }, { 40, 80 }, [&](float2 p) { image.set(p.x, p.y, red); });
+			Interpolation0({ 80, 40 }, { 13, 20 }, [&](float2 p) { image.set(p.x, p.y, red); });
+			image.flip_vertically();
+			image.write_tga_file("output/lesson1/temp.tga");
+		}
 
 		// 一条红线
 		{
@@ -45,14 +53,17 @@ public:
 			const float height = 1000;
 			Model model("resource/african_head/african_head.obj");
 			TGAImage image(width, height, TGAImage::RGB);
-			for (int i = 0; i<model.nfaces(); i++) {
+			for (int i = 0; i<model.nfaces(); i++) 
+			{
 				std::vector<int> face = model.face(i);
-				for (int j = 0; j<3; j++) {
+				for (int j = 0; j<3; j++) 
+				{
 					float3 v1 = model.vert(face[j]);
 					float3 v2 = model.vert(face[(j + 1) % 3]);
 					float2 p1((v1.x + 1.0) * width / 2.0, (v1.y + 1.0) * height / 2.0);
 					float2 p2((v2.x + 1.0) * width / 2.0, (v2.y + 1.0) * height / 2.0);
-					Interpolation(p1, p2, [&](float2 p) {
+					Interpolation(p1, p2, [&](float2 p) 
+					{
 						image.set(p.x, p.y, white);
 					});
 				}
@@ -85,13 +96,16 @@ public:
 			float2 t2[3] = { float2(180, 150), float2(120, 160), float2(130, 180) };
 
 			TGAImage image(200, 200, TGAImage::RGB);
-			triangle(t0[0], t0[1], t0[2], [&](float2 p) {
+			triangle(t0[0], t0[1], t0[2], [&](float2 p) 
+			{
 				image.set(p.x, p.y, red);
 			});
-			triangle(t1[0], t1[1], t1[2], [&](float2 p) {
+			triangle(t1[0], t1[1], t1[2], [&](float2 p) 
+			{
 				image.set(p.x, p.y, white);
 			});
-			triangle(t2[0], t2[1], t2[2], [&](float2 p) {
+			triangle(t2[0], t2[1], t2[2], [&](float2 p) 
+			{
 				image.set(p.x, p.y, green);
 			});
 			image.flip_vertically();
@@ -105,13 +119,16 @@ public:
 			float2 t2[3] = { float2(180, 150), float2(120, 160), float2(130, 180) };
 
 			TGAImage image(200, 200, TGAImage::RGB);
-			Interpolation(t0[0], t0[1], t0[2], [&](float2 p) {
+			Interpolation(t0[0], t0[1], t0[2], [&](float2 p) 
+			{
 				image.set(p.x, p.y, red);
 			});
-			Interpolation(t1[0], t1[1], t1[2], [&](float2 p) {
+			Interpolation(t1[0], t1[1], t1[2], [&](float2 p) 
+			{
 				image.set(p.x, p.y, white);
 			});
-			Interpolation(t2[0], t2[1], t2[2], [&](float2 p) {
+			Interpolation(t2[0], t2[1], t2[2], [&](float2 p) 
+			{
 				image.set(p.x, p.y, green);
 			});
 			image.flip_vertically();
@@ -124,15 +141,18 @@ public:
 			const float height = 1000;
 			Model model("resource/african_head/african_head.obj");
 			TGAImage image(width, height, TGAImage::RGB);
-			for (int i = 0; i<model.nfaces(); i++) {
+			for (int i = 0; i<model.nfaces(); i++) 
+			{
 				std::vector<int> face = model.face(i);
 				float2 screen_coords[3];
-				for (int j = 0; j<3; j++) {
+				for (int j = 0; j<3; j++) 
+				{
 					float3 v = model.vert(face[j]);
 					screen_coords[j] = float2(int((v.x + 1)*width / 2.0), int((v.y + 1)*height / 2.0));
 				}
 				TGAColor randomColor(rand() % 255, rand() % 255, rand() % 255, 255);
-				Interpolation(screen_coords[0], screen_coords[1], screen_coords[2], [&](float2 p) {
+				Interpolation(screen_coords[0], screen_coords[1], screen_coords[2], [&](float2 p) 
+				{
 					image.set(p.x, p.y, randomColor);
 				});
 			}
@@ -147,11 +167,13 @@ public:
 			float3 lightDir(0, 0, -1);
 			Model model("resource/african_head/african_head.obj");
 			TGAImage image(width, height, TGAImage::RGB);
-			for (int i = 0; i<model.nfaces(); i++) {
+			for (int i = 0; i<model.nfaces(); i++) 
+			{
 				std::vector<int> face = model.face(i);
 				float2 screen_coords[3];
 				float3 world_coords[3];
-				for (int j = 0; j<3; j++) {
+				for (int j = 0; j<3; j++) 
+				{
 					float3 v = model.vert(face[j]);
 					screen_coords[j] = float2(int((v.x + 1)*width / 2.0), int((v.y + 1)*height / 2.0));
 					world_coords[j] = v;
@@ -163,7 +185,8 @@ public:
 				if (diffuse > 0)
 				{
 					TGAColor lightColor(diffuse * 255, diffuse * 255, diffuse * 255, 255);
-					Interpolation(screen_coords[0], screen_coords[1], screen_coords[2], [&](float2 p) {
+					Interpolation(screen_coords[0], screen_coords[1], screen_coords[2], [&](float2 p) 
+					{
 						image.set(p.x, p.y, lightColor);
 					});
 				}
@@ -185,21 +208,23 @@ public:
 	{
 		// z-buffer
 		{
-			const float width = 500;
-			const float height = 500;
+			const int width = 500;
+			const int height = 500;
 			float3 lightDir(0, 0, -1);
 			Model model("resource/african_head/african_head.obj");
 			TGAImage image(width, height, TGAImage::RGB);
-			float zBuffer[500][500];
-			for(int i = 0; i < 500; ++i)
-				for(int j = 0; j < 500; ++j)
+			float zBuffer[width][height];
+			for(int i = 0; i < width; ++i)
+				for(int j = 0; j < height; ++j)
 					zBuffer[i][j] = -std::numeric_limits<float>::max();
 
-			for (int i = 0; i<model.nfaces(); i++) {
+			for (int i = 0; i<model.nfaces(); i++) 
+			{
 				std::vector<int> face = model.face(i);
 				float3 screen_coords[3];
 				float3 world_coords[3];
-				for (int j = 0; j<3; j++) {
+				for (int j = 0; j<3; j++) 
+				{
 					float3 v = model.vert(face[j]);
 					screen_coords[j] = float3(int((v.x + 1)*width / 2.0 + 0.5), int((v.y + 1)*height / 2.0 + 0.5), v.z);
 					world_coords[j] = v;
@@ -211,7 +236,8 @@ public:
 				if (diffuse > 0)
 				{
 					TGAColor lightColor(diffuse * 255, diffuse * 255, diffuse * 255, 255);
-					Interpolation(screen_coords[0], screen_coords[1], screen_coords[2], [&](float3 p) {
+					Interpolation(screen_coords[0], screen_coords[1], screen_coords[2], [&](float3 p) 
+					{
 						if (p.z > zBuffer[int(p.x)][int(p.y)])
 						{
 							image.set(p.x, p.y, lightColor);
@@ -224,9 +250,9 @@ public:
 			image.write_tga_file("output/lesson3/zBufferModel.tga");
 
 			image.clear();
-			for (int i = 0; i < 500; ++i)
+			for (int i = 0; i < width; ++i)
 			{
-				for (int j = 0; j < 500; ++j)
+				for (int j = 0; j < height; ++j)
 				{
 					int gray = (zBuffer[i][j] + 1) / 2 * 255;
 					image.set(i, j, TGAColor(gray, gray, gray, 255));
@@ -238,11 +264,50 @@ public:
 	}
 };
 
+class Lesson4 : public Lesson
+{
+public:
+	void start() override
+	{
+		auto renderer = new Renderer();
+
+		Model model("resource/african_head/african_head.obj");
+		std::vector<vertex> vertexes;
+		vertexes.reserve(model.nfaces()*3);
+		for (int i = 0; i < model.nfaces(); i++) 
+		{
+			for (int j = 0; j < 3; j++)
+			{
+				vertex v;
+				v.position = model.vert(i, j) * 400;
+				v.uv = model.uv(i, j);
+				v.normal = model.normal(i, j);
+				vertexes.push_back(v);
+			}
+		}
+		renderer->setVertexes(vertexes);
+		renderer->setVertAndFrag(&Lesson4::vert, &Lesson4::frag);
+		renderer->render("output/lesson4/pipeline.tga");
+	}
+
+	static v2f vert(appdata i)
+	{
+		v2f o;
+		o.position = i.vertex;
+		return o;
+	}
+
+	static float4 frag(v2f i)
+	{
+		return float4(1, 1, 1, 1);
+	}
+};
+
 int main(int argc, char** argv)
 {
-	vector<Lesson*> lessons = { new Lesson1(), new Lesson2(), new Lesson3() };
+	vector<Lesson*> lessons = { new Lesson1(), new Lesson2(), new Lesson3(), new Lesson4() };
 
-	lessons[2]->start();
+	lessons[3]->start();
 
 	for (auto lesson : lessons)
 	{
